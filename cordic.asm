@@ -35,10 +35,9 @@ k: .word 0x4dba76d7             # hex(floor(Product[Divide[1,Sqrt[1+Power[2,-2i]
 input_msg: .asciz "Enter the angle in degrees, in the following range: <-90, 90> to calculate its sine and cosine using CORDIC: "
 sin_msg: .asciz "sin: "
 cos_msg: .asciz ", cos: "
-inp_normalizer: .double 11930464.711111		# Divide[Power[2,31],180]
+inp_normalizer: .word 11930464		# Divide[Power[2,31],180]
 outp_normalizer: .dword 0x3e00000000000000           # 2^-31 in double format
-lower_bound: .double -90
-upper_bound: .double 90
+abs_bound: .double 90
 
 .text
 .globl main
@@ -48,22 +47,13 @@ main:
    li a7, 4
    la a0, input_msg
    ecall
-   li a7, 7
+   
+   li a7, 5
    ecall
-   fmv.d ft0, fa0
+   mv t0, a0
    
-   # input validation
-   fld ft1, lower_bound, t0
-   fld ft2, upper_bound, t0
-   fle.d t0, ft1, ft0
-   beqz t0, main 
-   fle.d t0, ft0, ft2
-   beqz t0, main 
-   
-   # input processing
-   fld ft1, inp_normalizer, t0
-   fmul.d ft0, ft0, ft1
-   fcvt.w.d a0, ft0
+   lw t1, inp_normalizer
+   mul a0, t0, t1
    
    # processing
    call cordic
