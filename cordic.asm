@@ -37,7 +37,8 @@ sin_msg: .asciz "sin: "
 cos_msg: .asciz ", cos: "
 inp_normalizer: .word 11930464		# Divide[Power[2,31],180]
 outp_normalizer: .dword 0x3e00000000000000           # 2^-31 in double format
-abs_bound: .double 90
+max_bound: .byte 90
+min_bound: .byte -90
 
 .text
 .globl main
@@ -51,6 +52,12 @@ main:
    li a7, 5
    ecall
    mv t0, a0
+   
+   # input processing
+   lb t1, max_bound
+   bgt t0, t1, main
+   lb t1, min_bound
+   blt t0, t1, main
    
    lw t1, inp_normalizer
    mul a0, t0, t1
