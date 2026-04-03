@@ -30,7 +30,7 @@ atan_table: .word 0x20000000,                  # hex(floor(arctan(Power[2,-i]) *
                   0x2,
                   0x1
 iterations: .byte 30
-k: .word 0x4dba76d7             # hex(floor(Product[1/Sqrt[1+2^-2i],{i,0,?}] * 2^31))
+k: .word 0x4dba76d7             # hex(floor(Product[1/Sqrt[1+2^-2i],{i,0,infinity}] * 2^31))
 input_msg: .asciz "Enter the value of angle in degrees multiplied by 2^32/180 to calculate its sine and cosine using CORDIC: "
 sin_msg: .asciz "sin: "
 cos_msg: .asciz ", cos: "
